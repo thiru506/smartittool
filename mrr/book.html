@@ -1,0 +1,383 @@
+
+<html>
+<head><title>Srinivasa Farms Meeting Room Request Date</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+ <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+ 
+ <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+
+<link rel="stylesheet" type="text/css" href="jquery.datetimepicker.css"/>
+<script src="jquery.datetimepicker.full.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+<style>
+body {
+  background: url(bg.jpg) no-repeat;
+  background-size: 120%;
+}
+
+</style>
+<style>
+.error{
+
+  color:red;
+}
+
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+$('#branch').change(function(){
+ branchId=$('#branch').val();
+    $.ajax({
+   url: 'ajax.php',
+   data: 'list=list&branchId='+branchId,
+    success: function(data) {
+    $('#mrtype').html(data);
+
+   }})
+   
+   });
+$('#mrdate').datetimepicker({ timepicker:false,format:'Y-m-d',showTimepicker: false})
+
+$('#rudate').datetimepicker({ timepicker:false,format:'Y-m-d',showTimepicker: false})
+$('#wrudate').datetimepicker({ timepicker:false,format:'Y-m-d',showTimepicker: false})
+$('#mrudate').datetimepicker({ timepicker:false,format:'Y-m-d',showTimepicker: false})
+$('#endtime').change(function(){
+//ed=$(this).val().slice(0, -3);
+//sd=$('#starttime').val().slice(0, -3);
+ed=$(this).val();
+sd=$('#starttime').val();
+//alert('ed is '+ed);
+//alert('sd is '+sd);
+s = sd.split(':');
+   e = ed.split(':');
+   min = e[1]-s[1];
+   hour_carry = 0;
+   if(min < 0){
+       min += 60;
+       hour_carry += 1;
+   }
+   hour = e[0]-s[0]-hour_carry;
+   min = (min).toString()
+   diff = hour + ":" + min.substring(0,2);
+   $('#mrduration').val(diff+' Hr');
+})
+
+$.validator.addMethod("valueNotEquals", function(value, element, arg){
+  return arg !== value;
+ }, "Value must not equal arg.");
+
+
+    $("form[name='mrr']").validate({
+    // Specify validation rules
+    rules: {
+      // The key name on the left side is the name attribute
+      // of an input field. Validation rules are defined
+      // on the right side
+      branch : "required",
+      mrtype : "required",
+      mrdate : "required",
+      starttime : "required",
+      endtime : "required",
+      mrduration : "required",
+      mrtopic : "required",
+      mtype : "required",
+      email: {
+        required: true,
+        // Specify that email should be validated
+        // by the built-in "email" rule
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 5
+        
+      }
+    },
+    // Specify validation error messages
+    messages: {
+        branch : "Please select the Branch",
+      mrtype : "Please select the Mr type",
+      mrdate : "Please select the Mr Date",
+      starttime : "Please select the Start Time",
+      endtime : "Please select the End Time",
+      mrduration : "Please select the Mr Duration",
+      mrtopic : "Please select the Mr Topic",
+      mtype : "Please select the Meeting Type",
+      email: "Please enter a valid Email address",
+
+    },
+    // Make sure the form is submitted to the destination defined
+    // in the "action" attribute of the form when valid
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+
+
+    $('#recurrence').change(function (){
+
+  v=$(this).val();
+  if(v=='1'){
+    $('#monthlydiv').hide();
+    $('#weeklydiv').hide();
+    $('#dailydiv').show();
+  }
+
+  if(v=='2'){
+    $('#dailydiv').hide();
+     $('#monthlydiv').hide();
+    $('#weeklydiv').show();
+  }
+
+  if(v=='3'){
+    $('#dailydiv').hide();
+    $('#weeklydiv').hide();
+    $('#monthlydiv').show();
+  }
+})
+
+});
+
+
+ </script>
+
+</head>
+<!--<body background="mrimg4.jpg">-->
+<body>
+    
+<div class="bd-pageheader" style="padding-top: 2rem;padding-bottom: 2rem;text-align: left;background-color: #5bc0de">
+
+<div class="row" style="width: 100%;">
+    <div class="col-md-4">
+ <div id="navbar" class="clearfix content-heading"> <img src="sh.png" class="img-thumbnail" alt="Responsive image">
+<!--<b><h7 class="">Meeting Room Request</h7></b>--></div>
+	</div>
+	<center><h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Creating Meeting Room Request</h3></center> 
+
+</div>
+</div>
+	<div class=" ">
+      <div class="container-fluid" >
+         <div class="row">
+        <div class="col-md-4 col-md-offset-4 centered"> 
+               
+            <div>
+			
+  <br>
+			<form id="mrForm" name="mrr"  action="mrdate.php" method="post">
+			  <div class="form-group">
+			    <select required  class="form-control form-control-lg" name="branch" id="branch" style="background-color:#ffe066; color:black">
+				<option value=''>Select Office</option>
+				<option value=1>13 Office</option>
+				<option value=2>KVH Office</option>
+			    </select>		
+			</div>
+
+             <div class="form-group">
+			   			                 <select  class="form-control form-control-lg" name="mrtype" id="mrtype" style="background-color:yellow; color:black";>
+							           <option value=''>Select Room</option>
+                       </select>		
+			                   </div>	
+
+			<div class="form-group">
+
+			    <input  class="form-control" name='mrdate' id="mrdate" placeholder="Date" style="background-color:yellow; color:black" >	
+		    </div>
+
+
+		    <div class="form-group">
+      <!--	<label for="date"> Start Time</label>-->
+        <!--<input class="form-control" type="text" name='starttime' id="starttime" required>-->
+        <select class="form-control form-control-lg" name="starttime" id="starttime" style="background-color:yellow; color:black" >
+      		<option value=''>Start Time</option>
+    <option value="09:00">09:00 AM</option>
+    <option value="09:30">09:30 AM</option>
+    <option value="10:00">10:00 AM</option>
+    <option value="10:30">10:30 AM</option>
+    <option value="11:00">11:00 AM</option>
+    <option value="11:30">11:30 AM</option>
+    <option value="12:00">12:00 PM</option>
+    <option value="12:30">12:30 PM</option>
+    <option value="13:30">1:30 PM</option>
+    <option value="14:00">2:00 PM</option>
+    <option value="14:30">2:30 PM</option>
+    <option value="15:00">3:00 PM</option>
+    <option value="15:30">03:30 PM</option>
+    <option value="16:00">04:00 PM</option>
+    <option value="16:30">04:30 PM</option>
+    <option value="17:00">05:00 PM</option>
+    <option value="17:30">05:30 PM</option>
+    <option value="18:00">06:00 PM</option>
+    <option value="18:30">06:30 PM</option>
+    <option value="19:00">07:00 PM</option>
+    <option value="19:30">07:30 PM</option>
+    <option value="20:00">08:00 PM</option>
+     <option value="20:30">08:30 PM</option>
+    <option value="21:00">09:00 PM</option>
+        </select></div>
+
+                <div class="form-group">
+
+                    <input  class="form-control" name='mrdate' id="mrdate" placeholder="Date" style="background-color:yellow; color:black" >
+                </div>
+                <div class="form-group">
+      <!--  <label for="date"> Start Time</label>-->
+        <!--<input class="form-control" type="text" name='starttime' id="starttime" required>-->
+        <select class="form-control form-control-lg" name="endtime" id="endtime" style="background-color:yellow; color:black" >
+          <h6><option value=''>End Time</option></h6>
+    <option value="09:00">09:00 AM</option>
+    <option value="09:30">09:30 AM</option>
+    <option value="10:00">10:00 AM</option>
+    <option value="10:30">10:30 AM</option>
+    <option value="11:00">11:00 AM</option>
+    <option value="11:30">11:30 AM</option>
+    <option value="12:00">12:00 PM</option>
+    <option value="12:30">12:30 PM</option>
+    <option value="13:30">01:30 PM</option>
+    <option value="14:00">02:00 PM</option>
+    <option value="14:30">02:30 PM</option>
+    <option value="15:00">03:00 PM</option>
+    <option value="15:30">03:30 PM</option>
+    <option value="16:00">04:00 PM</option>
+    <option value="16:30">04:30 PM</option>
+    <option value="17:00">05:00 PM</option>
+    <option value="17:30">05:30 PM</option>
+    <option value="18:00">06:00 PM</option>
+    <option value="18:30">06:30 PM</option>
+    <option value="19:00">07:00 PM</option>
+    <option value="19:30">07:30 PM</option>
+    <option value="20:00">08:00 PM</option>
+     <option value="20:30">08:30 PM</option>
+    <option value="21:00">09:00 PM</option>
+</select></div>
+      <div class="form-group">
+      	<!--<label for="date">Duration </label>-->
+      	<input class="form-control" type="text"  name='mrduration' id="mrduration" placeholder="Duration" value='' style="background-color:yellow; color:black" >
+       </div>
+			 <div class="form-group">
+			 <!--<label for="reqname">Topic:</label>-->
+            <input type="text" class="form-control" name='mrtopic' placeholder="Topic" required style="background-color:yellow; color:black">		
+			</div>
+
+<div class="form-group">
+      <select class="form-control form-control-lg" name="recurrence" id="recurrence" style="background-color:yellow; color:black"  >
+        <option value=''>Recurrence</option>
+        <option value=1>Daily</option>
+        <option value=2>Weekly</option>
+        <option value=3>Monthly</option>
+          </select>
+           
+      </div>
+
+      <div id='dailydiv' style='display: none'>
+         <input type="text" class="form-control" name='mrtopic' placeholder="Repeat until" id="rudate" style="background-color:yellow; color:black" >
+      </div>
+    <div id='weeklydiv' style='display: none'>
+           <input type="number" class="form-control" name='mrtopic' placeholder="Number of weeks" id="rudate" style="background-color:yellow; color:black" >
+      <div class='row'>
+         &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>Sun</label>&nbsp;&nbsp;&nbsp;&nbsp;
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>Mon</label>&nbsp;&nbsp;&nbsp;&nbsp;
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>Tue</label>&nbsp;&nbsp;&nbsp;&nbsp;
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>Wed</label>&nbsp;&nbsp;&nbsp;&nbsp;
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>Thu</label>&nbsp;&nbsp;&nbsp;&nbsp;
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>Fri</label>&nbsp;&nbsp;&nbsp;&nbsp;
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>Sat</label>&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
+          <input type="text" class="form-control" name='mrtopic' placeholder="Repeat until" id="wrudate" style="background-color:yellow; color:black">
+      </div>
+
+    <div id='monthlydiv' style='display: none'>
+          <input type="number" class="form-control" name='mrtopic' placeholder="Number of months" id="nmonths" style="background-color:yellow; color:black">
+      <div class='row'>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>1</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>2</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>3</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>4</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>5</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>6</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>7</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>8</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>9</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>10</label><br>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>11</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>12</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>13</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>14</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>15</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>16</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>17</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>18</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>19</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>20</label><br>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>21</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>22</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>23</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>24</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>25</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>26</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>27</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>28</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>29</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>30</label>
+         <input type="checkbox" class="" name='' id="rudate" > <label style='color:black'>31</label>
+</div>
+          <input type="text" class="form-control" name='mrtopic' placeholder="Repeat until" id="mrudate" style="background-color:yellow; color:black" >
+      </div>
+      </div>
+
+
+
+		    <div class="form-group">
+			<!-- <label for="reqname">MR Request Purpose:</label>-->
+			 <textarea class="form-control" name="mrpurpose" rows="5" id="rfr" placeholder="MR Request Purpose:" style="background-color:yellow; color:black"></textarea>
+            <!--<input type="text" class="form-control" name='reqname' required>	-->	
+			</div>
+
+		<div class="form-group">
+			<!-- <label for="branch">Meeting Type:</label>-->
+			    <select class="form-control form-control-lg" id="branch" name="mtype" style="background-color:yellow; color:black" >
+				<option value=''>Meeting Type</option>
+				<option value="Internal Team">Internal Team</option>
+  				<option value="External Vendor">External Vendor</option>
+  				<option value="Conference">Conference</option>
+  				 <option value="Event">Event</option>
+				</select>
+    		 </div>
+				
+				<div class="form-group">
+				 <input id="na" type="number" min="2" max="100" name="attendence" class="form-control" placeholder="No.of Attendence" 
+         style="background-color:yellow; color:black" >
+  			</div>
+
+			<div class="form-group">
+			 
+            <input type="text" class="form-control" name='email' id='email' placeholder="Email Of Organiser" style="background-color:yellow; color:black" >		
+			</div>
+
+						<div class="form-group">
+        <input type="Submit"  class=" btn btn-success" name='submit' id='submit' value='Submit' >	
+        <input type="button" class=" btn btn-danger" name='Cancel' id='Cancel' value='Cancel' ">  
+
+			</div>
+			
+		</form>
+             </div> 
+	  
+	  
+      </div>
+    </div>
+	</div>
+</body>
+</html>
